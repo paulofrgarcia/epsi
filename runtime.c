@@ -2,11 +2,33 @@
 
 extern int errors;
 
+//Checks if condition is true
+int condition_true(condition *c)
+{
+	switch(c->type)
+	{
+	case(CONDITION_VOID):
+	{
+		return 1;
+	}	
+	default: return 0;
+	}
+	return 0;
+}
 
 //Checks if datum is alive
 int is_alive(datum_ir *d)
 {
-	return 0;
+	int alive=1;
+	conditions_list *cond;
+
+	for(cond=d->conditions_head;cond!=NULL;cond=cond->next)
+	{
+		if(!condition_true(&(cond->datum_condition)))
+			return 0;
+	}
+
+	return 1;
 }
 
 

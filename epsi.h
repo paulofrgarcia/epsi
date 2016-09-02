@@ -13,18 +13,26 @@ int yylex (void);
 //parser
 int yyparse();
 
-//ir 
+//ir
+
+//datum types 
 #define TYPE_DATUM 	0
 #define TYPE_FINPUT 	1
 #define TYPE_FOUTPUT 	2
 #define TYPE_TERMINAL	3
 
+//condition types
+#define CONDITION_VOID	0
 
+
+//datum condition
 struct condition
 {
+	int type;
 };
 typedef struct condition condition;
 
+//List of datum conditions
 struct conditions_list
 {
 	condition datum_condition; 

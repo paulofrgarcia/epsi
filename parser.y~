@@ -11,7 +11,7 @@ int linenum=1;
 
 int yyerror() {
     // Add error handling routine as needed
-	printf("Syntax error\n");
+	printf("Syntax error at line %d.\n",linenum);
 }
  
 %}
@@ -34,7 +34,7 @@ int yyerror() {
 %token NUM_CONST LBRACKET RBRACKET COLON POINT SC
 %token INT CHAR FLOAT FINPUT FOUTPUT VOID TERMINAL
 
-%type <value> datum_type
+%type <value> datum_type assignment
  
 %%
  

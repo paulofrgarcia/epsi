@@ -34,7 +34,7 @@ int yyerror() {
 %token NUM_CONST LBRACKET RBRACKET COLON POINT SC
 %token INT CHAR FLOAT FINPUT FOUTPUT VOID TERMINAL
 
-%type <value> datum_type
+%type <value> datum_type assignment
  
 %%
  
@@ -71,7 +71,7 @@ type:
 
 assignment: 
 	  NUM_CONST 
-	| VOID 
+	| VOID 		{$$=CONDITION_VOID;}
 	| IDENTIFIER ;
 
 
