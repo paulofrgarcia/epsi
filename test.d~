@@ -12,7 +12,7 @@ foutput y
 
 
 
-terminal t
+terminal x
 {
 	int x:3;
 }

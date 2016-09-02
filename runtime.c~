@@ -1,7 +1,5 @@
 #include"epsi.h"
 
-extern int errors;
-
 
 //Checks if datum is alive
 int is_alive(datum_ir *d)

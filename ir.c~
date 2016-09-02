@@ -2,7 +2,12 @@
 
 extern int errors;
 
-
+struct datum_list
+{
+	datum_ir datum;
+	struct datum_list *next;
+};
+typedef struct datum_list datum_list;
 
 datum_list *datum_list_head=NULL;
 datum_list *datum_list_tail=NULL;

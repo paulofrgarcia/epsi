@@ -21,8 +21,7 @@ int yyparse();
 
 
 struct condition
-{
-};
+{};
 typedef struct condition condition;
 
 struct conditions_list

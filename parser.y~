@@ -11,7 +11,7 @@ int linenum=1;
 
 int yyerror() {
     // Add error handling routine as needed
-	printf("Syntax error at line %d.\n",linenum);
+	printf("Syntax error\n");
 }
  
 %}

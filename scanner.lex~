@@ -21,7 +21,6 @@ letter        [a-zA-Z_]
 "finput"	{ return FINPUT; }
 "foutput"	{ return FOUTPUT; }
 "void"		{ return VOID; }
-"terminal"	{ return TERMINAL; }
 
 
 
