@@ -9,18 +9,25 @@ int condition_true(condition *c)
 	{
 	case(CONDITION_VOID):
 	{
-		
+		return 1;
 	}	
+	case(CONDITION_INPUT):
+	{
+		return 1;
+	}
 	default: return 0;
 	}
 	return 0;
 }
 
-//Checks if datum is alive
-int is_alive(datum_ir *d)
+//Checks if datum is schedulable
+int is_schedulable(datum_ir *d)
 {
-	int alive=1;
 	conditions_list *cond;
+
+	if(d->state!=STATE_UNBORN)
+		//already been created
+		return 0;
 
 	for(cond=d->conditions_head;cond!=NULL;cond=cond->next)
 	{
@@ -33,14 +40,14 @@ int is_alive(datum_ir *d)
 
 
 extern datum_list *datum_list_head;
-//Selects next live datum
+//Selects next schedulable datum
 datum_ir *select_datum()
 {
 	datum_list *iter;
 
 	for(iter=datum_list_head;iter!=NULL;iter=iter->next)
 	{
-		if(is_alive(&(iter->datum)))
+		if(is_schedulable(&(iter->datum)))
 			return &(iter->datum);
 	}
 
@@ -49,9 +56,42 @@ datum_ir *select_datum()
 	return NULL;
 }
 
+void condition_input(condition *c)
+{
+	switch(c->elem_type)
+	{
+	case(ELEMENT_INTEGER):
+	{
+		c->elem_data=(int *)malloc(sizeof(int));
+		scanf("%d",(int *)(c->elem_data));
+		return;
+	}
+	default: return;
+	}
+}
+
+void execute_statement(condition *c)
+{
+	switch(c->type) //what kind of operation
+	{
+	case(CONDITION_INPUT):
+	{
+		condition_input(c);
+		return;
+	}
+	default: return;
+	}
+}
+
 //Creates datum instance
 void run_datum(datum_ir *d)
 {
+	conditions_list *c;
+	for(c=d->conditions_head;c!=NULL;c=c->next)
+	{
+		execute_statement(&(c->datum_condition));
+	}
+	d->state=STATE_ALIVE;
 }
 
 
@@ -72,7 +112,10 @@ int execute_one()
 	}
 
 	if(i->type==TYPE_TERMINAL)
+	{
+		printf("Terminal datum found.\n");
 		return 0;
+	}
 	else
 	{
 		run_datum(i);

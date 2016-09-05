@@ -24,8 +24,10 @@ int yyerror() {
 
 %union 
 {
-    int value;
-    char *identifier;
+	int value;	
+	char *identifier;
+	condition *cond;
+	conditions_list *cond_list;
 }
  
 
@@ -34,7 +36,9 @@ int yyerror() {
 %token NUM_CONST LBRACKET RBRACKET COLON POINT SC
 %token INT CHAR FLOAT FINPUT FOUTPUT VOID TERMINAL
 
-%type <value> datum_type assignment
+%type <value> datum_type assignment type
+%type <cond> statement
+%type <cond_list> statement_list; 
  
 %%
  
@@ -46,7 +50,7 @@ datum_list:
 	| datum_list datum ;
 
 datum : 
-	  datum_type IDENTIFIER LBRACKET datum_body RBRACKET	{insert_datum_ir($1,$2);};
+	  datum_type IDENTIFIER LBRACKET statement_list RBRACKET	{insert_datum_ir($1,$2,$4);};
 
 datum_type:
 	  		{$$=TYPE_DATUM;}
@@ -54,25 +58,22 @@ datum_type:
 	| FOUTPUT 	{$$=TYPE_FOUTPUT;} 
 	| TERMINAL	{$$=TYPE_TERMINAL;} ;
 
-datum_body: 
-	  statement_list ;
-
 statement_list: 
-	  statement
-	| statement_list statement ;
+	  statement			{$$=new_condition_list($1);}
+	| statement_list statement	{$$=append_condition($1,$2);};
 
 statement: 
-	  type IDENTIFIER COLON assignment SC 
-	| type IDENTIFIER SC 
-	| VOID COLON assignment SC;
+	  type IDENTIFIER COLON assignment SC 	{$$=new_condition($4,$1);}
+	| type IDENTIFIER SC 			{$$=new_condition(CONDITION_INPUT,$1);}
+	| VOID COLON assignment SC		{$$=new_condition($3,ELEMENT_VOID);};
 
 type: 
 	  INT | CHAR | FLOAT ;
 
 assignment: 
-	  NUM_CONST 
-	| VOID 
-	| IDENTIFIER ;
+	  NUM_CONST 	{$$=CONDITION_NUM_CONST;}
+	| VOID 		{$$=CONDITION_VOID;}
+	| IDENTIFIER 	{$$=CONDITION_IDENTIFIER;};
 
 
 

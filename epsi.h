@@ -15,6 +15,11 @@ int yyparse();
 
 //ir
 
+//datum states
+#define STATE_UNBORN	0
+#define STATE_ALIVE	1
+#define STATE_DEAD	2
+
 //datum types 
 #define TYPE_DATUM 	0
 #define TYPE_FINPUT 	1
@@ -22,13 +27,24 @@ int yyparse();
 #define TYPE_TERMINAL	3
 
 //condition types
-#define CONDITION_VOID	0
+#define CONDITION_VOID		0
+#define CONDITION_NUM_CONST	1
+#define CONDITION_IDENTIFIER	2
+#define CONDITION_INPUT		3
+
+//elements types
+#define	ELEMENT_VOID	0
+#define	ELEMENT_CHAR	1
+#define	ELEMENT_INTEGER	2
+#define	ELEMENT_FLOAT	3
 
 
 //datum condition
 struct condition
 {
-	int type;
+	int type;//validity type, i.e., start condition
+	int elem_type; //type of element (int, char, etc.)
+	void *elem_data; //we'll want to cast this
 };
 typedef struct condition condition;
 
@@ -40,10 +56,18 @@ struct conditions_list
 };
 typedef struct conditions_list conditions_list;
 
+
+condition *new_condition(int type, int elem_type);
+
+conditions_list *new_condition_list(condition *c);
+conditions_list *append_condition(conditions_list *list,condition *c);
+
+
 //structure that represents a datum
 struct datum_ir
 {
-	int type; //datum, finput, foutput
+	int state;
+	int type; //datum, finput, foutput, terminal
 	char *identifier; //datum name
 	conditions_list *conditions_head;
 };
@@ -57,7 +81,7 @@ struct datum_list
 };
 typedef struct datum_list datum_list;
 
-void insert_datum_ir(int type,char *name);
+void insert_datum_ir(int type,char *name, conditions_list *list);
 
 
 

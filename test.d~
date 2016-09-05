@@ -1,4 +1,4 @@
-finput x
+terminal x
 {	
 	void:void;
 	int x;
@@ -12,7 +12,7 @@ foutput y
 
 
 
-terminal x
+terminal t
 {
 	int x:3;
 }
