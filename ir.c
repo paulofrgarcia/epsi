@@ -2,12 +2,12 @@
 
 extern int errors;
 
-condition *new_condition(int type, int elem_type)
+condition *new_condition(int type, int elem_type, char *d_name)
 {
 	condition *cond=(condition *)malloc(sizeof(condition));
 	cond->type=type;
 	cond->elem_type=elem_type;
-
+	cond->datum_dependency=d_name;
 	return cond;
 }
 
@@ -73,6 +73,18 @@ void insert_datum_ir(int type,char *name, conditions_list *list)
 		datum_list_tail->datum.state=STATE_UNBORN;
 		datum_list_tail->next=NULL;
 	}
+}
+
+
+datum_ir *get_datum(char *s)
+{
+	datum_list *iter;
+	for(iter=datum_list_head;iter!=NULL;iter=iter->next)
+	{
+		if(strcmp(iter->datum.identifier,s)==0)
+			return &(iter->datum);
+	}
+	return NULL;
 }
 
 

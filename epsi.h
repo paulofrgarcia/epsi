@@ -13,6 +13,12 @@ int yylex (void);
 //parser
 int yyparse();
 
+struct assignment_data
+{
+	int value;
+	char *identifier;
+};
+
 //ir
 
 //datum states
@@ -45,6 +51,7 @@ struct condition
 	int type;//validity type, i.e., start condition
 	int elem_type; //type of element (int, char, etc.)
 	void *elem_data; //we'll want to cast this
+	char *datum_dependency; //identifier of datum depended upon
 };
 typedef struct condition condition;
 
@@ -57,7 +64,7 @@ struct conditions_list
 typedef struct conditions_list conditions_list;
 
 
-condition *new_condition(int type, int elem_type);
+condition *new_condition(int type, int elem_type, char *d_name);
 
 conditions_list *new_condition_list(condition *c);
 conditions_list *append_condition(conditions_list *list,condition *c);
@@ -83,6 +90,9 @@ typedef struct datum_list datum_list;
 
 void insert_datum_ir(int type,char *name, conditions_list *list);
 
+//returns pointer to datum named "s"
+//NULL if it doesn't exist
+datum_ir *get_datum(char *s);
 
 
 //runtime

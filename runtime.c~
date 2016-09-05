@@ -15,6 +15,18 @@ int condition_true(condition *c)
 	{
 		return 1;
 	}
+	case(CONDITION_NUM_CONST):
+	{
+		return 1;
+	}
+	case(CONDITION_IDENTIFIER):
+	{
+		//true if "identifier" datum is alive
+		if(((get_datum(c->datum_dependency))->state)==STATE_ALIVE)
+			return 1;
+		else
+			return 0;
+	}
 	default: return 0;
 	}
 	return 0;
@@ -87,6 +99,9 @@ void execute_statement(condition *c)
 void run_datum(datum_ir *d)
 {
 	conditions_list *c;
+	
+	printf("Creating datum %s...\n",d->identifier);
+
 	for(c=d->conditions_head;c!=NULL;c=c->next)
 	{
 		execute_statement(&(c->datum_condition));

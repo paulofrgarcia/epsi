@@ -15,6 +15,24 @@ int condition_true(condition *c)
 	{
 		return 1;
 	}
+	case(CONDITION_NUM_CONST):
+	{
+		return 1;
+	}
+	case(CONDITION_IDENTIFIER):
+	{
+		//true if "identifier" datum is alive
+		if(get_datum(c->datum_dependency)==NULL)
+		{
+			printf("Error: request for non-existing datum \"%s\".\n",c->datum_dependency);
+			errors++;
+			return 0;
+		}
+		if(((get_datum(c->datum_dependency))->state)==STATE_ALIVE)
+			return 1;
+		else
+			return 0;
+	}
 	default: return 0;
 	}
 	return 0;

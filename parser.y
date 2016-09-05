@@ -14,6 +14,9 @@ int yyerror() {
 	printf("Syntax error at line %d.\n",linenum);
 }
  
+
+
+
 %}
 
 
@@ -28,6 +31,7 @@ int yyerror() {
 	char *identifier;
 	condition *cond;
 	conditions_list *cond_list;
+	struct assignment_data assign_data;
 }
  
 
@@ -36,9 +40,10 @@ int yyerror() {
 %token NUM_CONST LBRACKET RBRACKET COLON POINT SC
 %token INT CHAR FLOAT FINPUT FOUTPUT VOID TERMINAL
 
-%type <value> datum_type assignment type
+%type <value> datum_type type
 %type <cond> statement
 %type <cond_list> statement_list; 
+%type <assign_data> assignment
  
 %%
  
@@ -63,9 +68,9 @@ statement_list:
 	| statement_list statement	{$$=append_condition($1,$2);};
 
 statement: 
-	  type IDENTIFIER COLON assignment SC 	{$$=new_condition($4,$1);}
-	| type IDENTIFIER SC 			{$$=new_condition(CONDITION_INPUT,$1);}
-	| VOID COLON assignment SC		{$$=new_condition($3,ELEMENT_VOID);};
+	  type IDENTIFIER COLON assignment SC 	{$$=new_condition($4.value,$1,$4.identifier);}
+	| type IDENTIFIER SC 			{$$=new_condition(CONDITION_INPUT,$1,NULL);}
+	| VOID COLON assignment SC		{$$=new_condition($3.value,ELEMENT_VOID,$3.identifier);};
 
 type: 
 	  INT	{$$=ELEMENT_INTEGER;}
@@ -73,9 +78,9 @@ type:
 	| FLOAT {$$=ELEMENT_FLOAT;};
 
 assignment: 
-	  NUM_CONST 	{$$=CONDITION_NUM_CONST;}
-	| VOID 		{$$=CONDITION_VOID;}
-	| IDENTIFIER 	{$$=CONDITION_IDENTIFIER;};
+	  NUM_CONST 	{$$.value=CONDITION_NUM_CONST;}
+	| VOID 		{$$.value=CONDITION_VOID;}
+	| IDENTIFIER 	{$$.value=CONDITION_IDENTIFIER; $$.identifier=$1;};
 
 
 

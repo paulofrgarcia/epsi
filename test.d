@@ -4,6 +4,11 @@ finput x
 	int x;
 }
 
+terminal t
+{
+	int x:y;
+}
+
 foutput y
 {	
 	void:x;
@@ -12,10 +17,7 @@ foutput y
 
 
 
-terminal t
-{
-	int x:3;
-}
+
 
 solo
 {	
