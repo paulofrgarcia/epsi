@@ -13,6 +13,13 @@ int yylex (void);
 //parser
 int yyparse();
 
+struct assignment_data
+{
+	int value;
+	char *identifier;
+	int num_const;
+};
+
 //ir
 
 //datum states

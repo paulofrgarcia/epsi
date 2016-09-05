@@ -37,7 +37,8 @@ int yyerror() {
 
  
 %token <identifier> IDENTIFIER 
-%token NUM_CONST LBRACKET RBRACKET COLON POINT SC
+%token <value> NUM_CONST
+%token LBRACKET RBRACKET COLON POINT SC
 %token INT CHAR FLOAT FINPUT FOUTPUT VOID TERMINAL
 
 %type <value> datum_type type
@@ -68,9 +69,9 @@ statement_list:
 	| statement_list statement	{$$=append_condition($1,$2);};
 
 statement: 
-	  type IDENTIFIER COLON assignment SC 	{$$=new_condition($4.value,$1,$4.identifier);}
-	| type IDENTIFIER SC 			{$$=new_condition(CONDITION_INPUT,$1,NULL);}
-	| VOID COLON assignment SC		{$$=new_condition($3.value,ELEMENT_VOID,$3.identifier);};
+	  type IDENTIFIER COLON assignment SC 	{$$=new_condition($4.value,$1,$4.identifier,$4.num_const);}
+	| type IDENTIFIER SC 			{$$=new_condition(CONDITION_INPUT,$1,NULL,0);}
+	| VOID COLON assignment SC		{$$=new_condition($3.value,ELEMENT_VOID,$3.identifier,$3.num_const);};
 
 type: 
 	  INT	{$$=ELEMENT_INTEGER;}
@@ -78,7 +79,7 @@ type:
 	| FLOAT {$$=ELEMENT_FLOAT;};
 
 assignment: 
-	  NUM_CONST 	{$$.value=CONDITION_NUM_CONST;}
+	  NUM_CONST 	{$$.value=CONDITION_NUM_CONST; $$.num_const=$1;}
 	| VOID 		{$$.value=CONDITION_VOID;}
 	| IDENTIFIER 	{$$.value=CONDITION_IDENTIFIER; $$.identifier=$1;};
 

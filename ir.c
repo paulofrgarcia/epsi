@@ -2,12 +2,25 @@
 
 extern int errors;
 
-condition *new_condition(int type, int elem_type, char *d_name)
+condition *new_condition(int type, int elem_type, char *d_name, int num_const)
 {
 	condition *cond=(condition *)malloc(sizeof(condition));
 	cond->type=type;
 	cond->elem_type=elem_type;
 	cond->datum_dependency=d_name;
+
+	switch(cond->elem_type)
+	{
+	case(ELEMENT_INTEGER):
+	{
+		cond->elem_data=(int *)malloc(sizeof(int));
+		*(int *)(cond->elem_data)=num_const;
+	} break;
+	default: return cond;
+	}
+
+
+
 	return cond;
 }
 

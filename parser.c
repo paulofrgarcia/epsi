@@ -457,9 +457,9 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    51,    51,    54,    55,    58,    61,    62,    63,    64,
-      67,    68,    71,    72,    73,    76,    77,    78,    81,    82,
-      83
+       0,    52,    52,    55,    56,    59,    62,    63,    64,    65,
+      68,    69,    72,    73,    74,    77,    78,    79,    82,    83,
+      84
 };
 #endif
 
@@ -1406,112 +1406,112 @@ yyreduce:
         case 5:
 
 /* Line 1806 of yacc.c  */
-#line 58 "parser.y"
+#line 59 "parser.y"
     {insert_datum_ir((yyvsp[(1) - (5)].value),(yyvsp[(2) - (5)].identifier),(yyvsp[(4) - (5)].cond_list));}
     break;
 
   case 6:
 
 /* Line 1806 of yacc.c  */
-#line 61 "parser.y"
+#line 62 "parser.y"
     {(yyval.value)=TYPE_DATUM;}
     break;
 
   case 7:
 
 /* Line 1806 of yacc.c  */
-#line 62 "parser.y"
+#line 63 "parser.y"
     {(yyval.value)=TYPE_FINPUT;}
     break;
 
   case 8:
 
 /* Line 1806 of yacc.c  */
-#line 63 "parser.y"
+#line 64 "parser.y"
     {(yyval.value)=TYPE_FOUTPUT;}
     break;
 
   case 9:
 
 /* Line 1806 of yacc.c  */
-#line 64 "parser.y"
+#line 65 "parser.y"
     {(yyval.value)=TYPE_TERMINAL;}
     break;
 
   case 10:
 
 /* Line 1806 of yacc.c  */
-#line 67 "parser.y"
+#line 68 "parser.y"
     {(yyval.cond_list)=new_condition_list((yyvsp[(1) - (1)].cond));}
     break;
 
   case 11:
 
 /* Line 1806 of yacc.c  */
-#line 68 "parser.y"
+#line 69 "parser.y"
     {(yyval.cond_list)=append_condition((yyvsp[(1) - (2)].cond_list),(yyvsp[(2) - (2)].cond));}
     break;
 
   case 12:
 
 /* Line 1806 of yacc.c  */
-#line 71 "parser.y"
-    {(yyval.cond)=new_condition((yyvsp[(4) - (5)].assign_data).value,(yyvsp[(1) - (5)].value),(yyvsp[(4) - (5)].assign_data).identifier);}
+#line 72 "parser.y"
+    {(yyval.cond)=new_condition((yyvsp[(4) - (5)].assign_data).value,(yyvsp[(1) - (5)].value),(yyvsp[(4) - (5)].assign_data).identifier,(yyvsp[(4) - (5)].assign_data).num_const);}
     break;
 
   case 13:
 
 /* Line 1806 of yacc.c  */
-#line 72 "parser.y"
-    {(yyval.cond)=new_condition(CONDITION_INPUT,(yyvsp[(1) - (3)].value),NULL);}
+#line 73 "parser.y"
+    {(yyval.cond)=new_condition(CONDITION_INPUT,(yyvsp[(1) - (3)].value),NULL,0);}
     break;
 
   case 14:
 
 /* Line 1806 of yacc.c  */
-#line 73 "parser.y"
-    {(yyval.cond)=new_condition((yyvsp[(3) - (4)].assign_data).value,ELEMENT_VOID,(yyvsp[(3) - (4)].assign_data).identifier);}
+#line 74 "parser.y"
+    {(yyval.cond)=new_condition((yyvsp[(3) - (4)].assign_data).value,ELEMENT_VOID,(yyvsp[(3) - (4)].assign_data).identifier,(yyvsp[(3) - (4)].assign_data).num_const);}
     break;
 
   case 15:
 
 /* Line 1806 of yacc.c  */
-#line 76 "parser.y"
+#line 77 "parser.y"
     {(yyval.value)=ELEMENT_INTEGER;}
     break;
 
   case 16:
 
 /* Line 1806 of yacc.c  */
-#line 77 "parser.y"
+#line 78 "parser.y"
     {(yyval.value)=ELEMENT_CHAR;}
     break;
 
   case 17:
 
 /* Line 1806 of yacc.c  */
-#line 78 "parser.y"
+#line 79 "parser.y"
     {(yyval.value)=ELEMENT_FLOAT;}
     break;
 
   case 18:
 
 /* Line 1806 of yacc.c  */
-#line 81 "parser.y"
-    {(yyval.assign_data).value=CONDITION_NUM_CONST;}
+#line 82 "parser.y"
+    {(yyval.assign_data).value=CONDITION_NUM_CONST; (yyval.assign_data).num_const=(yyvsp[(1) - (1)].value);}
     break;
 
   case 19:
 
 /* Line 1806 of yacc.c  */
-#line 82 "parser.y"
+#line 83 "parser.y"
     {(yyval.assign_data).value=CONDITION_VOID;}
     break;
 
   case 20:
 
 /* Line 1806 of yacc.c  */
-#line 83 "parser.y"
+#line 84 "parser.y"
     {(yyval.assign_data).value=CONDITION_IDENTIFIER; (yyval.assign_data).identifier=(yyvsp[(1) - (1)].identifier);}
     break;
 
@@ -1749,7 +1749,7 @@ yyreturn:
 
 
 /* Line 2067 of yacc.c  */
-#line 90 "parser.y"
+#line 91 "parser.y"
 
 
 

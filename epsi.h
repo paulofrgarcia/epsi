@@ -17,6 +17,7 @@ struct assignment_data
 {
 	int value;
 	char *identifier;
+	int num_const;
 };
 
 //ir
@@ -64,7 +65,7 @@ struct conditions_list
 typedef struct conditions_list conditions_list;
 
 
-condition *new_condition(int type, int elem_type, char *d_name);
+condition *new_condition(int type, int elem_type, char *d_name, int num_const);
 
 conditions_list *new_condition_list(condition *c);
 conditions_list *append_condition(conditions_list *list,condition *c);

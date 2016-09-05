@@ -80,7 +80,6 @@ void condition_input(condition *c)
 	{
 	case(ELEMENT_INTEGER):
 	{
-		c->elem_data=(int *)malloc(sizeof(int));
 		scanf("%d",(int *)(c->elem_data));
 		return;
 	}
@@ -88,13 +87,38 @@ void condition_input(condition *c)
 	}
 }
 
-void execute_statement(condition *c)
+void condition_num_const(condition *c, datum_ir *d)
+{
+	//for datum, finput and terminal, do nothing
+	//data was created at compile time
+	
+	//for output type, output data
+	if(d->type!=TYPE_FOUTPUT)
+		return;
+	
+	switch(c->elem_type)
+	{
+	case(ELEMENT_INTEGER):
+	{
+		printf("%d\n",*(int *)(c->elem_data));
+		return;
+	}
+	default: return;
+	}
+}
+
+void execute_statement(condition *c, datum_ir *d)
 {
 	switch(c->type) //what kind of operation
 	{
 	case(CONDITION_INPUT):
 	{
 		condition_input(c);
+		return;
+	}
+	case(CONDITION_NUM_CONST):
+	{
+		condition_num_const(c,d);
 		return;
 	}
 	default: return;
@@ -110,7 +134,7 @@ void run_datum(datum_ir *d)
 
 	for(c=d->conditions_head;c!=NULL;c=c->next)
 	{
-		execute_statement(&(c->datum_condition));
+		execute_statement(&(c->datum_condition),d);
 	}
 	d->state=STATE_ALIVE;
 }
