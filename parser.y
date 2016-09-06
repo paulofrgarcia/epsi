@@ -9,6 +9,8 @@
 
 int linenum=1;
 
+char void_string[]="void";
+
 int yyerror() {
     // Add error handling routine as needed
 	printf("Syntax error at line %d.\n",linenum);
@@ -32,6 +34,7 @@ int yyerror() {
 	condition *cond;
 	conditions_list *cond_list;
 	struct assignment_data assign_data;
+	struct term_data *term_data;
 }
  
 
@@ -43,8 +46,9 @@ int yyerror() {
 
 %type <value> datum_type type
 %type <cond> statement
-%type <cond_list> statement_list; 
+%type <cond_list> statement_list
 %type <assign_data> assignment
+%type <term_data> term
  
 %%
  
@@ -70,9 +74,9 @@ statement_list:
 	| statement_list statement	{$$=append_condition($1,$2);};
 
 statement: 
-	  type IDENTIFIER COLON assignment SC 	{$$=new_condition($4.value,$1,$4.identifier,$4.num_const);}
-	| type IDENTIFIER SC 			{$$=new_condition(CONDITION_INPUT,$1,NULL,0);}
-	| VOID COLON assignment SC		{$$=new_condition($3.value,ELEMENT_VOID,$3.identifier,$3.num_const);};
+	  type IDENTIFIER COLON assignment SC 	{$$=new_condition($2,$4.value,$1,$4.identifier,$4.num_const,$4.term_data);}
+	| type IDENTIFIER SC 			{$$=new_condition($2,CONDITION_INPUT,$1,NULL,0,NULL);}
+	| VOID COLON assignment SC		{$$=new_condition(void_string,$3.value,ELEMENT_VOID,$3.identifier,$3.num_const,$3.term_data);};
 
 type: 
 	  INT	{$$=ELEMENT_INTEGER;}
@@ -82,10 +86,12 @@ type:
 assignment: 
 	  NUM_CONST 	{$$.value=CONDITION_NUM_CONST; $$.num_const=$1;}
 	| VOID 		{$$.value=CONDITION_VOID;}
-	| IDENTIFIER 	{$$.value=CONDITION_IDENTIFIER; $$.identifier=$1;};
+	| IDENTIFIER 	{$$.value=CONDITION_IDENTIFIER; $$.identifier=$1;}
+	| term 		{$$.value=CONDITION_TERM; $$.term_data=$1;};
 
 
-
+term : 
+	  IDENTIFIER POINT IDENTIFIER {$$=create_term(TERM_MEMBER,$1,$3);} ;
 
 
 

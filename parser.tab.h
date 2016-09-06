@@ -61,18 +61,19 @@ typedef union YYSTYPE
 {
 
 /* Line 2068 of yacc.c  */
-#line 29 "parser.y"
+#line 31 "parser.y"
 
 	int value;	
 	char *identifier;
 	condition *cond;
 	conditions_list *cond_list;
 	struct assignment_data assign_data;
+	struct term_data *term_data;
 
 
 
 /* Line 2068 of yacc.c  */
-#line 76 "parser.tab.h"
+#line 77 "parser.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

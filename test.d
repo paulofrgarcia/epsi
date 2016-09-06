@@ -12,7 +12,7 @@ solo:
 foutput y:
 
 	void:solo;
-	int x:3;
+	int x:x.x;
 
 
 finput in:

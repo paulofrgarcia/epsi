@@ -10,15 +10,15 @@ int condition_true(condition *c)
 	case(CONDITION_VOID):
 	{
 		return 1;
-	}	
+	} break;	
 	case(CONDITION_INPUT):
 	{
 		return 1;
-	}
+	} break;
 	case(CONDITION_NUM_CONST):
 	{
 		return 1;
-	}
+	} break;
 	case(CONDITION_IDENTIFIER):
 	{
 		//true if "identifier" datum is alive
@@ -32,7 +32,11 @@ int condition_true(condition *c)
 			return 1;
 		else
 			return 0;
-	}
+	} break;
+	case(CONDITION_TERM):
+	{
+	printf("hello");
+	} break;
 	default: return 0;
 	}
 	return 0;

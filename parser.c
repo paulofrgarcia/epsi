@@ -78,6 +78,8 @@
 
 int linenum=1;
 
+char void_string[]="void";
+
 int yyerror() {
     // Add error handling routine as needed
 	printf("Syntax error at line %d.\n",linenum);
@@ -89,7 +91,7 @@ int yyerror() {
 
 
 /* Line 268 of yacc.c  */
-#line 93 "parser.c"
+#line 95 "parser.c"
 
 /* Enabling traces.  */
 #ifndef YYDEBUG
@@ -140,18 +142,19 @@ typedef union YYSTYPE
 {
 
 /* Line 293 of yacc.c  */
-#line 29 "parser.y"
+#line 31 "parser.y"
 
 	int value;	
 	char *identifier;
 	condition *cond;
 	conditions_list *cond_list;
 	struct assignment_data assign_data;
+	struct term_data *term_data;
 
 
 
 /* Line 293 of yacc.c  */
-#line 155 "parser.c"
+#line 158 "parser.c"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
@@ -163,7 +166,7 @@ typedef union YYSTYPE
 
 
 /* Line 343 of yacc.c  */
-#line 167 "parser.c"
+#line 170 "parser.c"
 
 #ifdef short
 # undef short
@@ -382,16 +385,16 @@ union yyalloc
 /* YYFINAL -- State number of the termination state.  */
 #define YYFINAL  8
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   26
+#define YYLAST   30
 
 /* YYNTOKENS -- Number of terminals.  */
 #define YYNTOKENS  17
 /* YYNNTS -- Number of nonterminals.  */
-#define YYNNTS  9
+#define YYNNTS  10
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  20
+#define YYNRULES  22
 /* YYNRULES -- Number of states.  */
-#define YYNSTATES  31
+#define YYNSTATES  34
 
 /* YYTRANSLATE(YYLEX) -- Bison symbol number corresponding to YYLEX.  */
 #define YYUNDEFTOK  2
@@ -440,7 +443,7 @@ static const yytype_uint8 yyprhs[] =
 {
        0,     0,     3,     5,     7,    10,    15,    16,    18,    20,
       22,    24,    27,    33,    37,    42,    44,    46,    48,    50,
-      52
+      52,    54,    56
 };
 
 /* YYRHS -- A `-1'-separated list of the rules' RHS.  */
@@ -451,15 +454,15 @@ static const yytype_int8 yyrhs[] =
       16,    -1,    23,    -1,    22,    23,    -1,    24,     3,     7,
       25,     9,    -1,    24,     3,     9,    -1,    15,     7,    25,
        9,    -1,    10,    -1,    11,    -1,    12,    -1,     4,    -1,
-      15,    -1,     3,    -1
+      15,    -1,     3,    -1,    26,    -1,     3,     8,     3,    -1
 };
 
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    52,    52,    55,    56,    59,    63,    64,    65,    66,
-      69,    70,    73,    74,    75,    78,    79,    80,    83,    84,
-      85
+       0,    56,    56,    59,    60,    63,    67,    68,    69,    70,
+      73,    74,    77,    78,    79,    82,    83,    84,    87,    88,
+      89,    90,    94
 };
 #endif
 
@@ -472,7 +475,7 @@ static const char *const yytname[] =
   "RBRACKET", "COLON", "POINT", "SC", "INT", "CHAR", "FLOAT", "FINPUT",
   "FOUTPUT", "VOID", "TERMINAL", "$accept", "program", "datum_list",
   "datum", "datum_type", "statement_list", "statement", "type",
-  "assignment", 0
+  "assignment", "term", 0
 };
 #endif
 
@@ -491,7 +494,7 @@ static const yytype_uint8 yyr1[] =
 {
        0,    17,    18,    19,    19,    20,    21,    21,    21,    21,
       22,    22,    23,    23,    23,    24,    24,    24,    25,    25,
-      25
+      25,    25,    26
 };
 
 /* YYR2[YYN] -- Number of symbols composing right hand side of rule YYN.  */
@@ -499,7 +502,7 @@ static const yytype_uint8 yyr2[] =
 {
        0,     2,     1,     1,     2,     4,     0,     1,     1,     1,
        1,     2,     5,     3,     4,     1,     1,     1,     1,     1,
-       1
+       1,     1,     3
 };
 
 /* YYDEFACT[STATE-NAME] -- Default reduction number in state STATE-NUM.
@@ -509,14 +512,14 @@ static const yytype_uint8 yydefact[] =
 {
        6,     7,     8,     9,     0,     2,     3,     0,     1,     4,
        0,     0,    15,    16,    17,     0,     5,    10,     0,     0,
-      11,     0,    20,    18,    19,     0,     0,    13,    14,     0,
-      12
+      11,     0,    20,    18,    19,     0,    21,     0,    13,     0,
+      14,     0,    22,    12
 };
 
 /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
-      -1,     4,     5,     6,     7,    16,    17,    18,    25
+      -1,     4,     5,     6,     7,    16,    17,    18,    25,    26
 };
 
 /* YYPACT[STATE-NUM] -- Index in YYTABLE of the portion describing
@@ -526,14 +529,14 @@ static const yytype_int8 yypact[] =
 {
        2,    -7,    -7,    -7,     1,    -3,    -7,     4,    -7,    -7,
        5,    -6,    -7,    -7,    -7,    13,    -6,    -7,    18,    -1,
-      -7,    10,    -7,    -7,    -7,    14,    -1,    -7,    -7,    15,
-      -7
+      -7,    10,     0,    -7,    -7,    14,    -7,    -1,    -7,    19,
+      -7,    15,    -7,    -7
 };
 
 /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-      -7,    -7,    -7,     3,    -7,    -7,     6,    -7,     0
+      -7,    -7,    -7,    20,    -7,    -7,    11,    -7,     3,    -7
 };
 
 /* YYTABLE[YYPACT[STATE-NUM]].  What to do in state STATE-NUM.  If
@@ -542,9 +545,10 @@ static const yytype_int8 yypgoto[] =
 #define YYTABLE_NINF -7
 static const yytype_int8 yytable[] =
 {
-      -6,     8,    22,    23,    12,    13,    14,    10,     9,    15,
-       1,     2,    11,     3,    24,     1,     2,    26,     3,    27,
-      19,    21,    20,    28,    30,     0,    29
+      -6,     8,    22,    23,    12,    13,    14,    10,    29,    15,
+       1,     2,    11,     3,    24,     1,     2,    27,     3,    28,
+      19,    21,    32,    30,    33,     9,     0,    20,     0,     0,
+      31
 };
 
 #define yypact_value_is_default(yystate) \
@@ -555,9 +559,10 @@ static const yytype_int8 yytable[] =
 
 static const yytype_int8 yycheck[] =
 {
-       3,     0,     3,     4,    10,    11,    12,     3,     5,    15,
+       3,     0,     3,     4,    10,    11,    12,     3,     8,    15,
       13,    14,     7,    16,    15,    13,    14,     7,    16,     9,
-       7,     3,    16,     9,     9,    -1,    26
+       7,     3,     3,     9,     9,     5,    -1,    16,    -1,    -1,
+      27
 };
 
 /* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
@@ -566,8 +571,8 @@ static const yytype_uint8 yystos[] =
 {
        0,    13,    14,    16,    18,    19,    20,    21,     0,    20,
        3,     7,    10,    11,    12,    15,    22,    23,    24,     7,
-      23,     3,     3,     4,    15,    25,     7,     9,     9,    25,
-       9
+      23,     3,     3,     4,    15,    25,    26,     7,     9,     8,
+       9,    25,     3,     9
 };
 
 #define yyerrok		(yyerrstatus = 0)
@@ -1404,7 +1409,7 @@ yyreduce:
         case 5:
 
 /* Line 1806 of yacc.c  */
-#line 59 "parser.y"
+#line 63 "parser.y"
     {insert_datum_ir((yyvsp[(1) - (4)].value),(yyvsp[(2) - (4)].identifier),(yyvsp[(4) - (4)].cond_list));
 	  /*datum_type IDENTIFIER LBRACKET statement_list RBRACKET	{insert_datum_ir($1,$2,$4);};*/}
     break;
@@ -1412,112 +1417,126 @@ yyreduce:
   case 6:
 
 /* Line 1806 of yacc.c  */
-#line 63 "parser.y"
+#line 67 "parser.y"
     {(yyval.value)=TYPE_DATUM;}
     break;
 
   case 7:
 
 /* Line 1806 of yacc.c  */
-#line 64 "parser.y"
+#line 68 "parser.y"
     {(yyval.value)=TYPE_FINPUT;}
     break;
 
   case 8:
 
 /* Line 1806 of yacc.c  */
-#line 65 "parser.y"
+#line 69 "parser.y"
     {(yyval.value)=TYPE_FOUTPUT;}
     break;
 
   case 9:
 
 /* Line 1806 of yacc.c  */
-#line 66 "parser.y"
+#line 70 "parser.y"
     {(yyval.value)=TYPE_TERMINAL;}
     break;
 
   case 10:
 
 /* Line 1806 of yacc.c  */
-#line 69 "parser.y"
+#line 73 "parser.y"
     {(yyval.cond_list)=new_condition_list((yyvsp[(1) - (1)].cond));}
     break;
 
   case 11:
 
 /* Line 1806 of yacc.c  */
-#line 70 "parser.y"
+#line 74 "parser.y"
     {(yyval.cond_list)=append_condition((yyvsp[(1) - (2)].cond_list),(yyvsp[(2) - (2)].cond));}
     break;
 
   case 12:
 
 /* Line 1806 of yacc.c  */
-#line 73 "parser.y"
-    {(yyval.cond)=new_condition((yyvsp[(4) - (5)].assign_data).value,(yyvsp[(1) - (5)].value),(yyvsp[(4) - (5)].assign_data).identifier,(yyvsp[(4) - (5)].assign_data).num_const);}
+#line 77 "parser.y"
+    {(yyval.cond)=new_condition((yyvsp[(2) - (5)].identifier),(yyvsp[(4) - (5)].assign_data).value,(yyvsp[(1) - (5)].value),(yyvsp[(4) - (5)].assign_data).identifier,(yyvsp[(4) - (5)].assign_data).num_const,(yyvsp[(4) - (5)].assign_data).term_data);}
     break;
 
   case 13:
 
 /* Line 1806 of yacc.c  */
-#line 74 "parser.y"
-    {(yyval.cond)=new_condition(CONDITION_INPUT,(yyvsp[(1) - (3)].value),NULL,0);}
+#line 78 "parser.y"
+    {(yyval.cond)=new_condition((yyvsp[(2) - (3)].identifier),CONDITION_INPUT,(yyvsp[(1) - (3)].value),NULL,0,NULL);}
     break;
 
   case 14:
 
 /* Line 1806 of yacc.c  */
-#line 75 "parser.y"
-    {(yyval.cond)=new_condition((yyvsp[(3) - (4)].assign_data).value,ELEMENT_VOID,(yyvsp[(3) - (4)].assign_data).identifier,(yyvsp[(3) - (4)].assign_data).num_const);}
+#line 79 "parser.y"
+    {(yyval.cond)=new_condition(void_string,(yyvsp[(3) - (4)].assign_data).value,ELEMENT_VOID,(yyvsp[(3) - (4)].assign_data).identifier,(yyvsp[(3) - (4)].assign_data).num_const,(yyvsp[(3) - (4)].assign_data).term_data);}
     break;
 
   case 15:
 
 /* Line 1806 of yacc.c  */
-#line 78 "parser.y"
+#line 82 "parser.y"
     {(yyval.value)=ELEMENT_INTEGER;}
     break;
 
   case 16:
 
 /* Line 1806 of yacc.c  */
-#line 79 "parser.y"
+#line 83 "parser.y"
     {(yyval.value)=ELEMENT_CHAR;}
     break;
 
   case 17:
 
 /* Line 1806 of yacc.c  */
-#line 80 "parser.y"
+#line 84 "parser.y"
     {(yyval.value)=ELEMENT_FLOAT;}
     break;
 
   case 18:
 
 /* Line 1806 of yacc.c  */
-#line 83 "parser.y"
+#line 87 "parser.y"
     {(yyval.assign_data).value=CONDITION_NUM_CONST; (yyval.assign_data).num_const=(yyvsp[(1) - (1)].value);}
     break;
 
   case 19:
 
 /* Line 1806 of yacc.c  */
-#line 84 "parser.y"
+#line 88 "parser.y"
     {(yyval.assign_data).value=CONDITION_VOID;}
     break;
 
   case 20:
 
 /* Line 1806 of yacc.c  */
-#line 85 "parser.y"
+#line 89 "parser.y"
     {(yyval.assign_data).value=CONDITION_IDENTIFIER; (yyval.assign_data).identifier=(yyvsp[(1) - (1)].identifier);}
+    break;
+
+  case 21:
+
+/* Line 1806 of yacc.c  */
+#line 90 "parser.y"
+    {(yyval.assign_data).value=CONDITION_TERM; (yyval.assign_data).term_data=(yyvsp[(1) - (1)].term_data);}
+    break;
+
+  case 22:
+
+/* Line 1806 of yacc.c  */
+#line 94 "parser.y"
+    {(yyval.term_data)=create_term(TERM_MEMBER,(yyvsp[(1) - (3)].identifier),(yyvsp[(3) - (3)].identifier));}
     break;
 
 
 
 /* Line 1806 of yacc.c  */
-#line 1521 "parser.c"
+#line 1540 "parser.c"
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1748,7 +1767,7 @@ yyreturn:
 
 
 /* Line 2067 of yacc.c  */
-#line 92 "parser.y"
+#line 98 "parser.y"
 
 
 

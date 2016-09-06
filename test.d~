@@ -3,31 +3,23 @@ finput x:
 	int x;
 
 
-terminal t
-{
+terminal t:
 	void:out;
-}
 
-solo
-{
+solo:
 	void:x;
-}
 
-foutput y
-{	
+foutput y:
+
 	void:solo;
-	int x:3;
-}
+	int x:x.u;
 
 
-finput in
-{
+finput in:
 	void:y;
 	int x;
-}
 
-foutput out
-{
+foutput out:
 	void:in;
 	int z:1;
-}
+

@@ -2,12 +2,14 @@
 
 extern int errors;
 
-condition *new_condition(int type, int elem_type, char *d_name, int num_const)
+condition *new_condition(char *name, int type, int elem_type, char *d_name, int num_const, struct term_data *term)
 {
 	condition *cond=(condition *)malloc(sizeof(condition));
 	cond->type=type;
 	cond->elem_type=elem_type;
 	cond->datum_dependency=d_name;
+	cond->term=term;
+	cond->elem_name=name;
 
 	switch(cond->elem_type)
 	{
@@ -24,6 +26,23 @@ condition *new_condition(int type, int elem_type, char *d_name, int num_const)
 	return cond;
 }
 
+//true if datum d has an element named s
+int datum_has_element(datum_ir *d, char *s)
+{
+	conditions_list *list;
+	if(d==NULL)
+		return 0;
+	if(s==NULL)
+		return 0;
+
+	for(list=d->conditions_head;list!=NULL;list=list->next)
+	{
+		if(strcmp(list->datum_condition.elem_name,s)==0)
+			return 1;
+	}
+
+	return 0;
+}
 
 conditions_list *new_condition_list(condition *c)
 {
@@ -101,6 +120,29 @@ datum_ir *get_datum(char *s)
 	return NULL;
 }
 
+
+//returns true if term is solvable
+int term_solvable(struct term_data *term)
+{
+	printf("Checking term %s %s\n",(char *)(term->data1),(char *)(term->data2));
+	switch(term->type)
+	{
+	case(TERM_MEMBER):
+	{
+		if(datum_has_element(get_datum((char *)(term->data1)),(char *)(term->data2)))
+		{
+			printf("success\n");
+			return 1;
+		}
+	} break;
+	default:
+	{
+		return 0;
+	} break;
+	}
+	return 0;
+}
+
 void static_check_condition(condition *c, datum_ir *datum)
 {
 	switch(c->type)
@@ -109,7 +151,7 @@ void static_check_condition(condition *c, datum_ir *datum)
 	{
 		//no errors, always valid
 		return;
-	}
+	} break;
 	case(CONDITION_NUM_CONST):
 	{
 		//Only valid if type is INTEGER
@@ -119,7 +161,7 @@ void static_check_condition(condition *c, datum_ir *datum)
 			errors++;
 			return;
 		}
-	}
+	} break;
 	case(CONDITION_IDENTIFIER):
 	{
 		//Only valid if identifier exists
@@ -129,7 +171,7 @@ void static_check_condition(condition *c, datum_ir *datum)
 			errors++;
 			return;
 		}
-	}
+	} break;
 	case(CONDITION_INPUT):
 	{
 		//only valid if datum is of type FINPUT
@@ -139,13 +181,24 @@ void static_check_condition(condition *c, datum_ir *datum)
 			errors++;
 			return;
 		}
-	}
+	} break;
+	case(CONDITION_TERM):
+	{
+		//check if term is solvable
+		//if yes, link to data
+		if(!term_solvable(c->term))
+		{
+			printf("Error: statement in datum \"%s\" is not solvable.\n",datum->identifier);
+			errors++;
+			return;
+		}
+	} break;
 	default: 
 	{
 		printf("Error: unknow type in datum \"%s\" statement.\n",datum->identifier);
 		errors++;
 		return;
-	}
+	} break;
 	}
 }
 
@@ -172,7 +225,33 @@ void static_checks()
 }
 
 
+struct term_data *create_term(int type, void *data1, void *data2)
+{
+	struct term_data *t=(struct term_data *)malloc(sizeof(struct term_data));
+	
+	switch(type)
+	{
+	case(TERM_MEMBER):
+	{
+		//data1 and data2 are datum and member identifier strings, respectively
+		t->type=type;
+		t->data1=(void *)((char *)malloc(strlen((char *)data1)+1));
+		strcpy((char *)(t->data1),(char *)data1);
+		t->data2=(void*)((char *)malloc(strlen((char *)data2)+1));
+		strcpy((char *)(t->data2),(char *)data2);
+		return t;
+		
+	} break;
+	default: 
+	{
+		printf("Error: unknown term type.\n");
+		errors++;
+		return t;
+	} break;
+	}
 
+	return t;
+}
 
 
 
