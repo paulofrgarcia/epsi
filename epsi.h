@@ -121,6 +121,7 @@ datum_ir *get_datum(char *s);
 
 int datum_has_element(datum_ir *d, char *s);
 
+void *get_datum_elem_data(char *d, char *s);
 
 //runtime
 void execute();

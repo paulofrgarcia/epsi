@@ -35,7 +35,18 @@ int condition_true(condition *c)
 	} break;
 	case(CONDITION_TERM):
 	{
-	printf("hello");
+	//printf("hello");
+		//true if "identifier" datum is alive
+		if(get_datum((char *)(c->term->data1))==NULL)
+		{
+			printf("Error: request for non-existing datum \"%s\".\n",c->datum_dependency);
+			errors++;
+			return 0;
+		}
+		if((get_datum((char *)(c->term->data1))->state)==STATE_ALIVE)
+			return 1;
+		else
+			return 0;
 	} break;
 	default: return 0;
 	}
@@ -106,9 +117,51 @@ void condition_num_const(condition *c, datum_ir *d)
 	{
 		printf("%d\n",*(int *)(c->elem_data));
 		return;
-	}
+	} break;
 	default: return;
 	}
+}
+
+void *calculate_term(struct term_data *term)
+{
+	void *result=NULL;
+
+	switch(term->type)
+	{
+	case(TERM_MEMBER):
+	{
+		//get data from datum
+		result=get_datum_elem_data((char *)(term->data1), (char *)(term->data2));
+	} break;
+	default:
+	{
+		return;
+	}
+	}
+
+	return result;
+}
+
+void process_term(condition *c, datum_ir *d)
+{
+	//calculate term
+	c->elem_data=calculate_term(c->term);
+
+	//if output datum, output term
+	if(d->type==TYPE_FOUTPUT)
+	{
+		switch(c->elem_type)
+		{
+		case(ELEMENT_INTEGER):
+		{
+			printf("%d\n",*(int *)(c->elem_data));
+			return;
+		} break;
+		default: return;
+		}
+	}
+
+	return;
 }
 
 void execute_statement(condition *c, datum_ir *d)
@@ -119,12 +172,17 @@ void execute_statement(condition *c, datum_ir *d)
 	{
 		condition_input(c);
 		return;
-	}
+	} break;
 	case(CONDITION_NUM_CONST):
 	{
 		condition_num_const(c,d);
 		return;
-	}
+	} break;
+	case(CONDITION_TERM):
+	{
+		process_term(c,d);
+		return;
+	} break;
 	default: return;
 	}
 }

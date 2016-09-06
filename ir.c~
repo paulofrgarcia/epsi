@@ -44,6 +44,24 @@ int datum_has_element(datum_ir *d, char *s)
 	return 0;
 }
 
+//returns pointer to elem_data of element s of datum d
+void *get_datum_elem_data(char *d, char *s)
+{
+	conditions_list *list;
+	if(d==NULL)
+		return 0;
+	if(s==NULL)
+		return 0;
+
+	for(list=(get_datum(d))->conditions_head;list!=NULL;list=list->next)
+	{
+		if(strcmp(list->datum_condition.elem_name,s)==0)
+			return 1;
+	}
+
+	return 0;
+}
+
 conditions_list *new_condition_list(condition *c)
 {
 	conditions_list *list=(conditions_list *)malloc(sizeof(conditions_list));
@@ -124,14 +142,12 @@ datum_ir *get_datum(char *s)
 //returns true if term is solvable
 int term_solvable(struct term_data *term)
 {
-	printf("Checking term %s %s\n",(char *)(term->data1),(char *)(term->data2));
 	switch(term->type)
 	{
 	case(TERM_MEMBER):
 	{
 		if(datum_has_element(get_datum((char *)(term->data1)),(char *)(term->data2)))
 		{
-			printf("success\n");
 			return 1;
 		}
 	} break;

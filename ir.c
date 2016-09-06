@@ -44,6 +44,24 @@ int datum_has_element(datum_ir *d, char *s)
 	return 0;
 }
 
+//returns pointer to elem_data of element s of datum d
+void *get_datum_elem_data(char *d, char *s)
+{
+	conditions_list *list;
+	if(d==NULL)
+		return NULL;
+	if(s==NULL)
+		return NULL;
+
+	for(list=(get_datum(d))->conditions_head;list!=NULL;list=list->next)
+	{
+		if(strcmp(list->datum_condition.elem_name,s)==0)
+			return list->datum_condition.elem_data;
+	}
+
+	return NULL;
+}
+
 conditions_list *new_condition_list(condition *c)
 {
 	conditions_list *list=(conditions_list *)malloc(sizeof(conditions_list));

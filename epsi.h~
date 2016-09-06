@@ -90,7 +90,7 @@ condition *new_condition(char *name, int type, int elem_type, char *d_name, int 
 conditions_list *new_condition_list(condition *c);
 conditions_list *append_condition(conditions_list *list,condition *c);
 
-int datum_has_element(datum_ir *d, char *s);
+
 
 
 struct term_data *create_term(int type, void *data1, void *data2);
@@ -118,6 +118,8 @@ void insert_datum_ir(int type,char *name, conditions_list *list);
 //returns pointer to datum named "s"
 //NULL if it doesn't exist
 datum_ir *get_datum(char *s);
+
+int datum_has_element(datum_ir *d, char *s);
 
 
 //runtime
