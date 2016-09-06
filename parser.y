@@ -56,7 +56,8 @@ datum_list:
 	| datum_list datum ;
 
 datum : 
-	  datum_type IDENTIFIER LBRACKET statement_list RBRACKET	{insert_datum_ir($1,$2,$4);};
+	datum_type IDENTIFIER COLON statement_list 	{insert_datum_ir($1,$2,$4);
+	  /*datum_type IDENTIFIER LBRACKET statement_list RBRACKET	{insert_datum_ir($1,$2,$4);};*/};
 
 datum_type:
 	  		{$$=TYPE_DATUM;}

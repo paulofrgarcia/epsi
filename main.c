@@ -28,6 +28,13 @@ int main(int argc, char *argv[])
 
 	if(errors!=0)
 		return 0;
+	
+	//Perform static checks
+	static_checks();
+
+	if(errors!=0)
+		return 0;
+
 
 	dbg_print_ir();
 

@@ -13,6 +13,9 @@ int yylex (void);
 //parser
 int yyparse();
 
+//static checks
+void static_checks();
+
 struct assignment_data
 {
 	int value;

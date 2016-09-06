@@ -37,7 +37,8 @@ int yyerror() {
 
  
 %token <identifier> IDENTIFIER 
-%token NUM_CONST LBRACKET RBRACKET COLON POINT SC
+%token <value> NUM_CONST
+%token LBRACKET RBRACKET COLON POINT SC
 %token INT CHAR FLOAT FINPUT FOUTPUT VOID TERMINAL
 
 %type <value> datum_type type

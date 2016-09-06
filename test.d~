@@ -1,25 +1,33 @@
-finput x
-{	
+finput x:
 	void:void;
 	int x;
-}
+
 
 terminal t
 {
-	int x:e;
+	void:out;
+}
+
+solo
+{
+	void:x;
 }
 
 foutput y
 {	
-	void:x;
+	void:solo;
 	int x:3;
 }
 
 
+finput in
+{
+	void:y;
+	int x;
+}
 
-
-
-solo
-{	
-	int x:3;
+foutput out
+{
+	void:in;
+	int z:1;
 }

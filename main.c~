@@ -3,6 +3,8 @@
 #include<string.h>
 #include"epsi.h"
 
+int errors=0;
+
 int main(int argc, char *argv[])
 {
 	FILE *in_file;
@@ -23,6 +25,13 @@ int main(int argc, char *argv[])
 
 	//parse and generate ir here
 	yyparse();
+
+	if(errors!=0)
+		return 0;
+	
+	//Perform static checks
+	static_checks();
+
 
 	dbg_print_ir();
 

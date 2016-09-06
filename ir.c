@@ -53,6 +53,7 @@ void insert_datum_ir(int type,char *name, conditions_list *list)
 {
 	datum_list *iter;
 
+
 	if(datum_list_head==NULL)
 	{
 		datum_list_head=(datum_list *)malloc(sizeof(datum_list));
@@ -99,6 +100,80 @@ datum_ir *get_datum(char *s)
 	}
 	return NULL;
 }
+
+void static_check_condition(condition *c, datum_ir *datum)
+{
+	switch(c->type)
+	{
+	case(CONDITION_VOID):
+	{
+		//no errors, always valid
+		return;
+	} break;
+	case(CONDITION_NUM_CONST):
+	{
+		//Only valid if type is INTEGER
+		if(c->elem_type!=ELEMENT_INTEGER)
+		{
+			printf("Error: type mismatch in datum \"%s\" statement.\n",datum->identifier);
+			errors++;
+			return;
+		}
+	} break;
+	case(CONDITION_IDENTIFIER):
+	{
+		//Only valid if identifier exists
+		if(get_datum(c->datum_dependency)==NULL)
+		{
+			printf("Error: request for non-existing datum \"%s\" in datum \"%s\".\n",c->datum_dependency,datum->identifier);
+			errors++;
+			return;
+		}
+	} break;
+	case(CONDITION_INPUT):
+	{
+		//only valid if datum is of type FINPUT
+		if(datum->type!=TYPE_FINPUT)	
+		{
+			printf("Error: input statement in datum \"%s\" of non \"finput\" type.\n",datum->identifier);
+			errors++;
+			return;
+		}
+	} break;
+	default: 
+	{
+		printf("Error: unknow type in datum \"%s\" statement.\n",datum->identifier);
+		errors++;
+		return;
+	} break;
+	}
+}
+
+
+void static_check_datum(datum_ir *datum)
+{
+	conditions_list *list=datum->conditions_head;
+	condition *c;
+
+	for(c=&(list->datum_condition);list!=NULL;list=list->next,c=&(list->datum_condition))
+	{
+		static_check_condition(c,datum);
+	}
+}
+
+void static_checks()
+{
+	datum_list *iter;
+	for(iter=datum_list_head;iter!=NULL;iter=iter->next)
+	{
+		static_check_datum(&(iter->datum));
+	}
+	return;
+}
+
+
+
+
 
 
 //Debug functions
