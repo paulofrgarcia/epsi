@@ -62,6 +62,11 @@ struct assignment_data
 
 //term types
 #define TERM_MEMBER	0
+#define TERM_NUM_CONST	1
+#define TERM_DIVISION	2
+#define TERM_TIMES	3
+#define TERM_MINUS	4
+#define TERM_PLUS	5
 
 
 //datum condition

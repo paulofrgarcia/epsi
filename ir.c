@@ -151,6 +151,23 @@ int term_solvable(struct term_data *term)
 			return 1;
 		}
 	} break;
+	case(TERM_NUM_CONST):
+	{
+		return 1;
+	} break;
+	case(TERM_TIMES):
+	case(TERM_DIVISION):
+	case(TERM_MINUS):
+	case(TERM_PLUS):
+	{
+		if((term->data1==NULL)||(term->data2==NULL))
+			return 0;
+		if(!term_solvable((struct term_data *)(term->data1)))
+			return 0;
+		if(!term_solvable((struct term_data *)(term->data2)))
+			return 0;
+		return 1;
+	} break;
 	default:
 	{
 		return 0;
@@ -245,6 +262,8 @@ struct term_data *create_term(int type, void *data1, void *data2)
 {
 	struct term_data *t=(struct term_data *)malloc(sizeof(struct term_data));
 	
+	if(type==TERM_NUM_CONST) printf("\n%d\n",*(int *)data1);
+
 	switch(type)
 	{
 	case(TERM_MEMBER):
@@ -257,6 +276,23 @@ struct term_data *create_term(int type, void *data1, void *data2)
 		strcpy((char *)(t->data2),(char *)data2);
 		return t;
 		
+	} break;
+	case(TERM_NUM_CONST):
+	{
+		t->type=type;
+		t->data1=(void *)((int *)malloc(sizeof(int)));
+		*(int *)(t->data1)=*(int *)data1;
+		return t;
+	} break;
+	case(TERM_TIMES):
+	case(TERM_DIVISION):
+	case(TERM_MINUS):
+	case(TERM_PLUS):
+	{
+		t->type=type;
+		t->data1=data1;
+		t->data2=data2;
+		return t;
 	} break;
 	default: 
 	{

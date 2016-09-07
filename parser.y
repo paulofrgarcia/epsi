@@ -43,12 +43,13 @@ int yyerror() {
 %token <value> NUM_CONST
 %token LBRACKET RBRACKET COLON POINT SC
 %token INT CHAR FLOAT FINPUT FOUTPUT VOID TERMINAL
+%token PLUS MINUS TIMES DIVISION LPAR RPAR
 
 %type <value> datum_type type
 %type <cond> statement
 %type <cond_list> statement_list
 %type <assign_data> assignment
-%type <term_data> term
+%type <term_data> term subterm factor
  
 %%
  
@@ -84,14 +85,28 @@ type:
 	| FLOAT {$$=ELEMENT_FLOAT;};
 
 assignment: 
-	  NUM_CONST 	{$$.value=CONDITION_NUM_CONST; $$.num_const=$1;}
-	| VOID 		{$$.value=CONDITION_VOID;}
+	  VOID 		{$$.value=CONDITION_VOID;}
 	| IDENTIFIER 	{$$.value=CONDITION_IDENTIFIER; $$.identifier=$1;}
 	| term 		{$$.value=CONDITION_TERM; $$.term_data=$1;};
 
 
-term : 
-	  IDENTIFIER POINT IDENTIFIER {$$=create_term(TERM_MEMBER,$1,$3);} ;
+term:
+	  term PLUS subterm 	{$$=create_term(TERM_PLUS,(void *)$1,(void *)$3);}
+	| term MINUS subterm 	{$$=create_term(TERM_MINUS,(void *)$1,(void *)$3);}
+	| subterm 		{$$=$1;} ;
+
+subterm: 
+	  subterm TIMES factor 		{$$=create_term(TERM_TIMES,(void *)$1,(void *)$3);}
+	| subterm DIVISION factor 	{$$=create_term(TERM_DIVISION,(void *)$1,(void *)$3);}
+	| factor 			{$$=$1;} ;
+
+
+factor: 
+	  LPAR term RPAR 		{$$=$2;}
+	| IDENTIFIER POINT IDENTIFIER	{$$=create_term(TERM_MEMBER,$1,$3);}
+	| NUM_CONST 			{$$=create_term(TERM_NUM_CONST,(void *)(&$1),NULL);} ;
+
+
 
 
 

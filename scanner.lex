@@ -14,6 +14,12 @@ letter        [a-zA-Z_]
 ":"		{ return COLON;}
 ";"		{ return SC;}
 "."		{ return POINT;}
+"+"		{ return PLUS; }
+"-"		{ return MINUS; }
+"*"		{ return TIMES; }
+"/"		{ return DIVISION; }
+"("		{ return LPAR; }
+")"		{ return RPAR; }
 
 "int"		{ return INT; }
 "char" 		{ return CHAR; }

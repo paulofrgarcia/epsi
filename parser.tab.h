@@ -50,7 +50,13 @@
      FINPUT = 268,
      FOUTPUT = 269,
      VOID = 270,
-     TERMINAL = 271
+     TERMINAL = 271,
+     PLUS = 272,
+     MINUS = 273,
+     TIMES = 274,
+     DIVISION = 275,
+     LPAR = 276,
+     RPAR = 277
    };
 #endif
 
@@ -73,7 +79,7 @@ typedef union YYSTYPE
 
 
 /* Line 2068 of yacc.c  */
-#line 77 "parser.tab.h"
+#line 83 "parser.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

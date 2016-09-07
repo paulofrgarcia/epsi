@@ -14,6 +14,10 @@ letter        [a-zA-Z_]
 ":"		{ return COLON;}
 ";"		{ return SC;}
 "."		{ return POINT;}
+"+"		{ return PLUS; }
+"-"		{ return MINUS; }
+"*"		{ return TIMES; }
+"/"		{ return DIVISION; }
 
 "int"		{ return INT; }
 "char" 		{ return CHAR; }
@@ -21,6 +25,7 @@ letter        [a-zA-Z_]
 "finput"	{ return FINPUT; }
 "foutput"	{ return FOUTPUT; }
 "void"		{ return VOID; }
+"terminal"	{ return TERMINAL; }
 
 
 

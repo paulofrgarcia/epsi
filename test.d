@@ -6,14 +6,15 @@ finput x:
 terminal t:
 	void:out;
 
-solo:
+finput solo:
 	void:x;
+	int x;
 
 foutput y:
 
 	void:solo;
-	int x:x.x;
-
+	int x:x.x+1;
+	int y:solo.x;
 
 finput in:
 	void:y;
