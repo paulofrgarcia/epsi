@@ -262,7 +262,7 @@ struct term_data *create_term(int type, void *data1, void *data2)
 {
 	struct term_data *t=(struct term_data *)malloc(sizeof(struct term_data));
 	
-	if(type==TERM_NUM_CONST) printf("\n%d\n",*(int *)data1);
+	//if(type==TERM_NUM_CONST) printf("\n%d\n",*(int *)data1);
 
 	switch(type)
 	{

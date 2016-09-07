@@ -181,6 +181,30 @@ void *calculate_term(struct term_data *term)
 		tmp2=*(int *)(calculate_term((struct term_data*)(term->data2)));
 		*(int *)result= tmp1 + tmp2;
 	} break;
+	case(TERM_MINUS):
+	{
+		result=(void *)(int *)malloc(sizeof(int));
+		
+		tmp1=*(int *)(calculate_term((struct term_data*)(term->data1)));
+		tmp2=*(int *)(calculate_term((struct term_data*)(term->data2)));
+		*(int *)result= tmp1 - tmp2;
+	} break;
+	case(TERM_TIMES):
+	{
+		result=(void *)(int *)malloc(sizeof(int));
+		
+		tmp1=*(int *)(calculate_term((struct term_data*)(term->data1)));
+		tmp2=*(int *)(calculate_term((struct term_data*)(term->data2)));
+		*(int *)result= tmp1 * tmp2;
+	} break;
+	case(TERM_DIVISION):
+	{
+		result=(void *)(int *)malloc(sizeof(int));
+		
+		tmp1=*(int *)(calculate_term((struct term_data*)(term->data1)));
+		tmp2=*(int *)(calculate_term((struct term_data*)(term->data2)));
+		*(int *)result= tmp1 / tmp2;
+	} break;
 	default:
 	{
 		printf("result");
@@ -223,11 +247,6 @@ void execute_statement(condition *c, datum_ir *d)
 		condition_input(c);
 		return;
 	} break;
-	/*case(CONDITION_NUM_CONST):
-	{
-		condition_num_const(c,d);
-		return;
-	} break;*/
 	case(CONDITION_TERM):
 	{
 		process_term(c,d);

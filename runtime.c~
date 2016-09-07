@@ -161,7 +161,6 @@ void *calculate_term(struct term_data *term)
 	void *result=NULL;
 	int tmp1, tmp2;
 	
-	printf("term calc");
 	switch(term->type)
 	{
 	case(TERM_MEMBER):
@@ -182,6 +181,30 @@ void *calculate_term(struct term_data *term)
 		tmp2=*(int *)(calculate_term((struct term_data*)(term->data2)));
 		*(int *)result= tmp1 + tmp2;
 	} break;
+	case(TERM_MINUS):
+	{
+		result=(void *)(int *)malloc(sizeof(int));
+		
+		tmp1=*(int *)(calculate_term((struct term_data*)(term->data1)));
+		tmp2=*(int *)(calculate_term((struct term_data*)(term->data2)));
+		*(int *)result= tmp1 - tmp2;
+	} break;
+	case(TERM_TIMES):
+	{
+		result=(void *)(int *)malloc(sizeof(int));
+		
+		tmp1=*(int *)(calculate_term((struct term_data*)(term->data1)));
+		tmp2=*(int *)(calculate_term((struct term_data*)(term->data2)));
+		*(int *)result= tmp1 * tmp2;
+	} break;
+	case(TERM_DIVISION):
+	{
+		result=(void *)(int *)malloc(sizeof(int));
+		
+		tmp1=*(int *)(calculate_term((struct term_data*)(term->data1)));
+		tmp2=*(int *)(calculate_term((struct term_data*)(term->data2)));
+		*(int *)result= tmp1 / tmp2;
+	} break;
 	default:
 	{
 		printf("result");
@@ -199,7 +222,7 @@ void process_term(condition *c, datum_ir *d)
 
 	//if output datum, output term
 	if(d->type==TYPE_FOUTPUT)
-	{printf("here\n");
+	{
 		switch(c->elem_type)
 		{
 		case(ELEMENT_INTEGER):

@@ -1,26 +1,16 @@
 finput x:
 	void:void;
-	int x;
+	int in1;
 
-
-terminal t:
-	void:out;
 
 finput solo:
 	void:x;
-	int x;
+	int in2;
 
 foutput y:
+	int out1:(x.in1+solo.in2)*2;
+	
 
-	void:solo;
-	int x:x.x+1;
-	int y:solo.x;
-
-finput in:
+terminal t:
 	void:y;
-	int x;
-
-foutput out:
-	void:in;
-	int z:1;
 
